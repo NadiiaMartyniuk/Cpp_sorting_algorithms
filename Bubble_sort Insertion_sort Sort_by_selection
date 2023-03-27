@@ -1,0 +1,154 @@
+#include <iostream>
+#include<cstdlib>
+#include<time.h>
+ using namespace std;
+
+ void PrzydzialPamieci(int *&tab, int *n){
+    int k;
+    cout<<"Rozmiar tablicy ";
+    cin>>k;
+    if (k>0) {
+        *n=k;
+        tab=new int[k];
+    }
+    else{
+        cout<<"Niemozliwo ustawicz taki rozmiar "<<endl<<"Ustawiono domyslny rozmiar 1 "<<endl;
+        *n=1;
+        tab=new int[1];
+    }
+
+ }
+ void VypelnieniaTablicy(int *tab, int n, int a, int b){
+    srand(time(NULL));
+    for( int i=0;i<n;i++){
+        tab[i]=rand()%(b-a+1)+a;
+    }
+ }
+void YyswietlenieTablicy(int *tab, int n){
+    cout<<"To twoja tablica "<<endl;
+    for (int i=0; i<n; i++){
+        cout<<tab[i]<<" ";
+    }
+}
+void SortowanieBabelkowe(int *tab, int n, int tryb ){
+    switch(tryb){
+    case 1:
+        for(int i=0; i<n; i++){
+            for (int j=0; j<n-1; j++){
+                if (tab[j]<tab[j+1]){
+                    swap(tab[j],tab[j+1]);
+                }
+            }
+
+        }
+        break;
+    case 2:
+        for(int i=0; i<n; i++){
+            for (int j=0; j<n-1; j++){
+                if (tab[j]>tab[j+1]){
+                    swap(tab[j],tab[j+1]);
+                }
+            }
+
+        }
+        break;
+    default: cout<<"Nie ma takiej opcji"<<endl<<"Tablicz nie zostala posortowana"<<endl;}
+}
+void SortowaniePrzezWybor(int *tab, int n, int tryb){
+    int ind, a;
+    switch (tryb){
+    case 1:
+        a=1;
+        for (int i=0; i<n; i++){
+            ind=i;
+            for (int j=a; j<n; j++){
+                if (tab[j]>tab[ind]){
+                    ind=j;
+                }
+            }
+            swap(tab[i],tab[ind]);
+            a++;
+        }
+        break;
+    case 2:
+        a=1;
+        for (int i=0; i<n; i++){
+            ind=i;
+            for (int j=a; j<n; j++){
+                if (tab[j]<tab[ind]){
+                    ind=j;
+                }
+            }
+            swap(tab[i],tab[ind]);
+            a++;
+        }
+        break;
+    default: cout<<"Nie ma takiej opcji"<<endl<<"Tablicz nie zostala posortowana"<<endl;
+    }
+}
+void SortowaniePrzezWstawianie(int *tab, int n, int tryb){
+    int a;
+    switch(tryb){
+    case 1:
+        for(int i=0; i<n; i++){
+            if(tab[i]<tab[i+1]){
+                swap(tab[i],tab[i+1]);
+                    a=i;
+                    while(tab[a]>tab[a-1]){
+                        swap(tab[a],tab[a-1]);
+                        a--;
+                    }
+            }
+        }
+        break;
+    case 2:
+        for(int i=0; i<=n-1; i++){
+            if(tab[i]>tab[i+1]){
+                swap(tab[i],tab[i+1]);
+                    a=i;
+                    while((tab[a]<tab[a-1])&&(a>0)){
+                        swap(tab[a],tab[a-1]);
+                        a--;
+                    }
+            }
+        }
+        break;
+    default: cout<<"Nie ma takiej opcji"<<endl<<"Tablicz nie zostala posortowana"<<endl;
+    }
+}
+void UsuniecieTabeli(int *&tab){
+    delete []tab;
+}
+
+ int main(){
+    int* tab=nullptr;
+    int n, a, b, tryb, typ_sort;
+    PrzydzialPamieci(tab, &n);
+    cout<<"Wprowadz poczatek oraz koniec przedzialu, jakim bede wypelniona tablica ";
+    cin>>a>>b;
+    if (a>b){
+        swap(a,b);
+    }
+    VypelnieniaTablicy(tab, n, a, b);
+    YyswietlenieTablicy(tab,n);
+    typ_sort=1;
+    while((typ_sort==1)||(typ_sort==2)||(typ_sort==3)){
+    cout<<endl<<"Jak chcesz posortowac ? "<<endl<<"1- Malejaco"<<endl<<"2-Rosnaco"<<endl;
+    cin>>tryb;
+    cout<<"Jakim sposobem chcesz posortowac ?"<<endl<<"1 - Sortowanie Babelkowe "<<endl;
+    cout<<"2 - Sortowanie Przez Wybor"<<endl<<"3 - Sortowanie Przez Wstawianie"<<endl;
+    cin>>typ_sort;
+    switch(typ_sort){
+        case 1: SortowanieBabelkowe(tab,n,tryb);
+                YyswietlenieTablicy(tab,n);
+                break;
+        case 2: SortowaniePrzezWybor(tab,n,tryb);
+                YyswietlenieTablicy(tab,n);
+                break;
+        case 3: SortowaniePrzezWstawianie(tab,n,tryb);
+                YyswietlenieTablicy(tab,n);
+                break;
+        default: cout<<"Nie ma takiej opcji "<<endl;
+    }}
+    UsuniecieTabeli(tab);
+    return 0;}
